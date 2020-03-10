@@ -1,8 +1,6 @@
 
 provider "aws"{
    region  = "${var.aws_region}"
-   access_key = "${var.access_key}" 
-   secret_key = "${var.secret_key}"
 }
 
   resource "aws_vpc" "main" {
@@ -25,7 +23,7 @@ resource "aws_internet_gateway" "InternetGateway" {
   resource "aws_subnet" "subnet1" {
   vpc_id     = "${aws_vpc.main.id}"
   cidr_block = "192.168.1.0/24"
-  availability_zone = "us-east-2c"
+  availability_zone = "us-east-1a"
 
   tags = {
     Name = "Subnet1"
@@ -148,7 +146,7 @@ resource "aws_lb_cookie_stickiness_policy" "default" {
 
 resource "aws_instance" "web" {
   instance_type = "t2.micro"
-  ami = "ami-0998bf58313ab53da"
+  ami = "ami-5f709f34"
   vpc_security_group_ids = ["${aws_security_group.sg_elb.id}"]
   subnet_id              = "${aws_subnet.subnet1.id}"
 
