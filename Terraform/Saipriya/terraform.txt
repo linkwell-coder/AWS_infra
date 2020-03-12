@@ -1,0 +1,75 @@
+provider "aws" {
+  region = "us-east
+  access_key = "AKIA3MGRPMCWKIQWOO2B"
+  secret_key = "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"
+
+}
+
+resource "aws_instance" "EC2_Sai" {
+  ami           = "ami-a1b2c3d4"
+  instance_type = "t2.micro"
+  vpc_security_group_ids = "allow_tls"
+  subnet_id              = "main"
+}
+ resource "aws_vpc" "main" {
+  cidr_block       = "10.0.0.0/16"
+  instance_tenancy = "dedicated"
+
+  tags = {
+    Name = "main"
+  }
+}
+resource "aws_subnet" "main" {
+  vpc_id     = "${aws_vpc.main.id}"
+  cidr_block = "10.0.1.0/24"
+
+  tags = {
+  Name = "Main"
+  }
+}
+
+resource "aws_route_table" "r" {
+  vpc_id = "${aws_vpc.default.id}"
+
+  route {
+    cidr_block = "10.0.1.0/24"
+    gateway_id = "${aws_internet_gateway.main.id}"
+  }
+
+  route {
+    ipv6_cidr_block        = "::/0"
+    egress_only_gateway_id = "${aws_egress_only_internet_gateway.foo.id}"
+  }
+
+  tags = {
+    Name = "main"
+  }
+}
+resource "aws_route_table_association" "a" {
+  subnet_id      = aws_subnet.foo.id
+  route_table_id = aws_route_table.bar.id
+}
+resource "aws_security_group" "allow_tls" {
+  name        = "allow_tls"
+  description = "Allow TLS inbound traffic"
+  vpc_id      = "${aws_vpc.main.id}"
+
+  ingress {
+    description = "TLS from VPC"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+ cidr_blocks = aws_vpc.main.cidr_block
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "allow_tls"
+  }
+}
