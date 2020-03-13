@@ -1,0 +1,3 @@
+[State]
+timestamp=1568734091
+converted=org.gnome.Vino.convert;ibus.convert;brasero.convert;mutter-schemas.convert;gsettings-desktop-schemas.convert;gvfs-dns-sd.convert;evolution-data-server.convert;gnome-shell-overrides.convert;gnome-session.convert;org.gnome.crypto.pgp.convert;gnome-settings-daemon.convert;org.gnome.crypto.pgp_keyservers.convert;org.gnome.crypto.cache.convert;gvfs-smb.convert;libgnomekbd.convert;wm-schemas.convert;
